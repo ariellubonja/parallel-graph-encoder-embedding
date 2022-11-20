@@ -2,7 +2,7 @@ import copy
 
 import numpy as np
 from numpy import linalg as LA
-from numba import jit
+from numba import jit, prange
 # from tensorflow.keras.utils import to_categorical
 
 
@@ -273,7 +273,7 @@ class DataPreprocess:
         return NewSets
 
 
-@jit(nopython=True)
+@jit(nopython=True, parallel=True, fastmath=True)
 def X_prep_laplacian(X, n):
     """
       input X is a single S3 edge list
@@ -284,9 +284,12 @@ def X_prep_laplacian(X, n):
     s = X.shape[0] # get the row number of the edg list
     # if kwargs["Laplacian"]:
     D = np.zeros((n,1), dtype=np.int32)
-    for row in X: # Iterate over edges
-        # TODO What about self-edges at the end?
-        [v_i, v_j, edg_i_j] = row
+
+    n_edges = len(X)
+
+    # for row in X: # Iterate over edges
+    for i in prange(n_edges): # prange - parallel range from Numba
+        [v_i, v_j, edg_i_j] = X[i,:]
         v_i = int(v_i)
         v_j = int(v_j)
         edg_i_j = int(edg_i_j)
@@ -304,15 +307,16 @@ def X_prep_laplacian(X, n):
     return X
 
 
-@jit(nopython=True)
+@jit(nopython=True, parallel=True, fastmath=True)
 def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     # Edge List Version in O(s)
     Z = np.zeros((n,k))
     i = 0
 
+    n_edges = len(X)
 
-    for row in X: # Loop over edges once only?
-        [v_i, v_j, edg_i_j] = row
+    for i in prange(n_edges): # prange - parallel range from Numba
+        [v_i, v_j, edg_i_j] = X[i,:]
         v_i = int(v_i)
         v_j = int(v_j)
         if possibility_detected:
@@ -333,6 +337,7 @@ def numba_main_embedding(X, Y, W, possibility_detected, n, k):
 
 
 ############------------graph_encoder_embed_start----------------###############
+# @jit(nopython=True, parallel=True) - this doesn't work, too many arguments
 def graph_encoder_embed(X,Y,n,**kwargs):
     """
       input X is s*3 edg list: nodei, nodej, connection weight(i,j)
