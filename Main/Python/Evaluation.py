@@ -203,6 +203,6 @@ if __name__ == '__main__':
     print("Running GraphEncoderEmbed()")
 
     Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = True)
-    # print(Z)
-    np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
-    # print(W)
+
+    # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
+
