@@ -150,7 +150,7 @@ if __name__ == '__main__':
 
     print("Loading Twitch graph")
 
-    G_edgelist = np.load("../../../Thesis-Graph-Data/twitch.npy")
+    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/twitch.npy")
     # G_edgelist = np.loadtxt("../../../Thesis-Graph-Data/twitch-SNAP-bidir-manually", delimiter=" ", dtype=np.int32)
 
     G_edgelist = G_edgelist[G_edgelist[:, 0].argsort()] # Sort by first column
@@ -161,7 +161,7 @@ if __name__ == '__main__':
 
     n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
 
-    Y = np.load("../../../Thesis-Graph-Data/twitch-Y20.npy")
+    Y = np.load("../../../Thesis-Graph-Data/Ys/twitch-Y20.npy")
 
 
     # print("Loading Twitch weighted graph")

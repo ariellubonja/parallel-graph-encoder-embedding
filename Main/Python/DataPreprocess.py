@@ -273,7 +273,7 @@ class DataPreprocess:
         return NewSets
 
 
-@jit(nopython=True)
+# @jit(nopython=True)
 def X_prep_laplacian(X, n):
     """
       input X is a single S3 edge list
@@ -304,7 +304,7 @@ def X_prep_laplacian(X, n):
     return X
 
 
-@jit(nopython=True)
+# @jit(nopython=True)
 def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     # Edge List Version in O(s)
     Z = np.zeros((n,k))
