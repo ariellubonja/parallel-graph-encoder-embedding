@@ -301,7 +301,7 @@ def X_prep_laplacian(X, n):
 
     D = np.power(D, -0.5)
 
-    for i in range(s):
+    for i in prange(s):
         X[i,2] *= (D[int(X[i,0])] * D[int(X[i,1])])[0] # Turns from ndarray of 1 element to float
 
     return X
@@ -311,7 +311,7 @@ def X_prep_laplacian(X, n):
 def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     # Edge List Version in O(s)
     Z = np.zeros((n,k))
-    i = 0
+    # i = 0
 
     n_edges = len(X)
 
