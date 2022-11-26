@@ -134,14 +134,16 @@ if __name__ == '__main__':
     # case_10.summary()
     #
     # print("Loading Orkut-User2Group graph - 5.1GB")
-
-    # G_edgelist = np.loadtxt("../../../Downloads/Thesis-Graph-Data/aff-orkut-user2groups.edges", comments="%", dtype=np.int32)
+    #
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut-groups.npy")
     #
     # # Add column of ones - weights
     # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
     #
     # n = int(np.max(G_edgelist[:, 1]) + 1)  # Nr. vertices
     #
+    # Y = np.load("../../../Thesis-Graph-Data/Ys/orkut-groups-Y40.npy")
+
     # case = Case(n)
     # case_10 = case.case_10() # This is O(n^2)
     # case_10.summary()
