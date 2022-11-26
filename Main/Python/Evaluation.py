@@ -3,7 +3,7 @@ from sklearn.metrics import adjusted_rand_score
 # from tensorflow.keras.utils import to_categorical
 import numpy as np
 from utils.create_test_case import Case
-from Main.Python.DataPreprocess import graph_encoder_embed
+from DataPreprocess import graph_encoder_embed
 
 class Evaluation:
     def GNN_supervise_test(self, gnn, z_test, y_test):
