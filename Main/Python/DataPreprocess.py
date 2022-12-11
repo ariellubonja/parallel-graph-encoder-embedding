@@ -337,14 +337,14 @@ def numba_main_embedding(X, Y, W, possibility_detected, n, k):
 
 
 ############------------graph_encoder_embed_start----------------###############
-# @jit(nopython=True, parallel=True) - this doesn't work, too many arguments
-def graph_encoder_embed(X,Y,n,**kwargs):
+@jit(nopython=True, parallel=True) # - this doesn't work, too many arguments
+def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
     """
       input X is s*3 edg list: nodei, nodej, connection weight(i,j)
       graph embedding function
     """
-    defaultKwargs = {'Correlation': True}
-    kwargs = { **defaultKwargs, **kwargs}
+#     defaultKwargs = {'Correlation': True}
+#     kwargs = { **defaultKwargs, **kwargs}
 
     #If Y has more than one dimention , Y is the range of cluster size for a vertex. e.g. [2,10], [2,5,6]
     # check if Y is the possibility version. e.g.Y: n*k each row list the possibility for each class[0.9, 0.1, 0, ......]
@@ -362,7 +362,7 @@ def graph_encoder_embed(X,Y,n,**kwargs):
     nk = np.zeros((1,k))
     W = np.zeros((n,k))
 
-    if kwargs["Laplacian"]:
+    if Laplacian:
         X = X_prep_laplacian(X, n)
 
     if possibility_detected:
@@ -386,7 +386,7 @@ def graph_encoder_embed(X,Y,n,**kwargs):
     # then divide each element by their row norm
     # e.g. [ele_i/norm2,ele_j/norm2,ele_k/norm2]
 
-    if kwargs['Correlation']:
+    if Correlation:
         row_norm = LA.norm(Z, axis = 1)
         reshape_row_norm = np.reshape(row_norm, (n,1))
         Z = np.nan_to_num(Z/reshape_row_norm)

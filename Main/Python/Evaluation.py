@@ -204,7 +204,7 @@ if __name__ == '__main__':
 
     print("Running GraphEncoderEmbed()")
 
-    Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = True)
+    Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = False)
 
     # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
 
