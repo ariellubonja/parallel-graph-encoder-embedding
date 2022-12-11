@@ -387,9 +387,16 @@ def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
     # e.g. [ele_i/norm2,ele_j/norm2,ele_k/norm2]
 
     if Correlation:
-        row_norm = LA.norm(Z, axis = 1)
+        # row_norm = LA.norm(Z, axis = 1) # Len n_nodes
+        # Numba doesn't support axis on LA.norm() - need to rewrite
+        # confirmed correct for Twitch using np.isclose()
+        row_norm = np.empty(n)
+
+        for i in prange(n):
+            row_norm[i] = LA.norm(Z[i,:])
+
         reshape_row_norm = np.reshape(row_norm, (n,1))
-        Z = np.nan_to_num(Z/reshape_row_norm)
+        # Z = np.nan_to_num(Z/reshape_row_norm) # why this hack???
 
     return Z, W
 
