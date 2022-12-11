@@ -89,21 +89,14 @@ if __name__ == '__main__':
     # # print(Dataset.n)
     #
     # print("Running graph_encoder_embed()")
+    # # case = Case(n)
+    # # case_10 = case.case_10() # This is O(n^2)
+    # # case_10.summary()
+    #
     #
     # Z, W = graph_encoder_embed(Dataset.X[0], Dataset.Y, Dataset.n, Correlation = False)
     # print("Z:\n", Z)
     # # print(W)
-
-
-    # print("Loading custom Facebook graph")
-    #
-    # G_edgelist = np.loadtxt("../../Data/facebook_combined.txt", dtype=np.int64)
-    #
-    # # Add column of ones - weights
-    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
-    #
-    # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
-    # Y = np.reshape(np.loadtxt("../../../../Downloads/Y-facebook-5percent.txt", dtype=np.int32), (4039, 1))
 
     # print("Loading LiveJournal graph - 1GB")
     #
@@ -114,10 +107,7 @@ if __name__ == '__main__':
     #
     # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
     #
-    # # case = Case(n)
-    # # case_10 = case.case_10() # This is O(n^2)
-    # # case_10.summary()
-    #
+
     # Y = np.reshape(np.loadtxt("../../../../Downloads/liveJournal-Y50-sparse.txt", dtype=np.int16), (4847571, 1))
 
     # print("Loading Orkut graph - 1.8GB")
@@ -150,20 +140,20 @@ if __name__ == '__main__':
 
     # Y = np.reshape(np.loadtxt("../../../../Downloads/orkut-Y50-sparse.txt", dtype=np.int16), (3072441, 1))
 
-    print("Loading Twitch graph")
-
-    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/twitch.npy")
-    # G_edgelist = np.loadtxt("../../../Thesis-Graph-Data/twitch-SNAP-bidir-manually", delimiter=" ", dtype=np.int32)
-
-    G_edgelist = G_edgelist[G_edgelist[:, 0].argsort()] # Sort by first column
-
-    # Add column of ones - weights
-    G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))#.astype(np.int32)
-    # Make sure G_edgelist isn't restricted to int-s
-
-    n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
-
-    Y = np.load("../../../Thesis-Graph-Data/Ys/twitch-Y20.npy")
+    # print("Loading Twitch graph")
+    #
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/twitch.npy")
+    # # G_edgelist = np.loadtxt("../../../Thesis-Graph-Data/twitch-SNAP-bidir-manually", delimiter=" ", dtype=np.int32)
+    #
+    # G_edgelist = G_edgelist[G_edgelist[:, 0].argsort()] # Sort by first column
+    #
+    # # Add column of ones - weights
+    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))#.astype(np.int32)
+    # # Make sure G_edgelist isn't restricted to int-s
+    #
+    # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+    #
+    # Y = np.load("../../../Thesis-Graph-Data/Ys/twitch-Y20.npy")
 
 
     # print("Loading Twitch weighted graph")
@@ -181,30 +171,20 @@ if __name__ == '__main__':
     # Y = np.load("../../../Thesis-Graph-Data/twitch-Y20.npy")
 
 
-    # print("Loading Pokec graph - 400MB")
-    #
-    # G_edgelist = np.loadtxt("../../../../Downloads/soc-pokec-SNAP.txt", dtype=np.int32)
-    #
-    # # Add column of ones - weights
-    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
-    #
-    # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
-    # # #
-    # # case = Case(n)
-    # # case_10 = case.case_10() # This is O(n^2)
-    #
-    # # Load Y from file
-    # Y = np.reshape(np.loadtxt("../../../../Downloads/pokec-Y50-sparse.txt", dtype=np.int16), (1632804,1))
-    # Y = Y.astype(int)
-    # case1 = Case(4847571)
-    #
-    # Ynew = case1.add_unknown_ariel(50, 4847571, .8, Y)
-    # #
-    # np.savetxt("pokec-Y50-sparse.txt", Ynew, fmt="%d")
+    print("Loading Pokec graph - 400MB")
+
+    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/pokec.npy")
+
+    # Add column of ones - weights
+    G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+
+    n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+
+    Y = np.load("../../../Thesis-Graph-Data/pokec-Y50.npy")
 
     print("Running GraphEncoderEmbed()")
 
     Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = False)
 
-    # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
+    np.savetxt("Z_to_check.csv", Z, fmt="%f")
 

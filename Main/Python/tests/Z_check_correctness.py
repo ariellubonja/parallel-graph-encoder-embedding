@@ -15,16 +15,47 @@ class TestStringMethods(unittest.TestCase):
 
         self.assertTrue(np.all(comparison))
 
-    # def test_isupper(self):
-    #     self.assertTrue('FOO'.isupper())
-    #     self.assertFalse('Foo'.isupper())
-    #
-    # def test_split(self):
-    #     s = 'hello world'
-    #     self.assertEqual(s.split(), ['hello', 'world'])
-    #     # check that s.split fails when the separator is not a string
-    #     with self.assertRaises(TypeError):
-    #         s.split(2)
+    def test_Pokec(self):
+        files_dir = "../../../Experiments/Compare-Results/"
+        graph_path = "Pokec/"
+        Z_Correct = np.loadtxt(files_dir + graph_path + "Z_CorrectResults.csv")
+        Z_to_check = np.loadtxt(files_dir + graph_path + "Z_to_check.csv")
+
+        comparison = np.isclose(Z_Correct, Z_to_check)
+
+        self.assertTrue(np.all(comparison))
+
+    def test_LiveJournal(self):
+        files_dir = "../../../Experiments/Compare-Results/"
+        graph_path = "LiveJournal/"
+        Z_Correct = np.loadtxt(files_dir + graph_path + "Z_CorrectResults.csv")
+        Z_to_check = np.loadtxt(files_dir + graph_path + "Z_to_check.csv")
+
+        comparison = np.isclose(Z_Correct, Z_to_check)
+
+        self.assertTrue(np.all(comparison))
+
+    def test_Orkut(self):
+        files_dir = "../../../Experiments/Compare-Results/"
+        graph_path = "Orkut/"
+        Z_Correct = np.loadtxt(files_dir + graph_path + "Z_CorrectResults.csv")
+        Z_to_check = np.loadtxt(files_dir + graph_path + "Z_to_check.csv")
+
+        comparison = np.isclose(Z_Correct, Z_to_check)
+
+        self.assertTrue(np.all(comparison))
+
+
+    def test_Orkut_Groups(self):
+        files_dir = "../../../Experiments/Compare-Results/"
+        graph_path = "Orkut-groups/"
+        Z_Correct = np.loadtxt(files_dir + graph_path + "Z_CorrectResults.csv")
+        Z_to_check = np.loadtxt(files_dir + graph_path + "Z_to_check.csv")
+
+        comparison = np.isclose(Z_Correct, Z_to_check)
+
+        self.assertTrue(np.all(comparison))
+
 
 if __name__ == '__main__':
     unittest.main()
