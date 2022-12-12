@@ -369,10 +369,10 @@ def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
         nk=np.sum(Y, axis=0)
         W=Y/nk
     else:
-        for i in range(k):
+        for i in prange(k):
             nk[0,i] = np.count_nonzero(Y[:,0]==i)
 
-        for i in range(Y.shape[0]): # Y.shape[0] == n_vertices
+        for i in prange(Y.shape[0]): # Y.shape[0] == n_vertices
             k_i = Y[i,0]
             if k_i >=0:
                 W[i,k_i] = 1/nk[0,k_i]
