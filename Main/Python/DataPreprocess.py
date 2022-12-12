@@ -327,9 +327,9 @@ def numba_main_embedding(X, Y, W, possibility_detected, n, k):
             label_i = Y[v_i][0]
             label_j = Y[v_j][0]
 
-            if label_j >= 0: # Why > 0 label?
+            if label_j >= 0: # >=0 means ground truth exists
                 Z[v_i, label_j] += W[v_j, label_j]*edg_i_j
-            if (label_i >= 0) and (v_i != v_j):
+            if (label_i >= 0) and (v_i != v_j): # This is strangely asymmetric??
                 Z[v_j, label_i] += W[v_i, label_i]*edg_i_j
 
     return Z
