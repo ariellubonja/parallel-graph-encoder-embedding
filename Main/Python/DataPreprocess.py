@@ -306,7 +306,7 @@ def X_prep_laplacian(X, n):
 
     return X
 
-@jit(nopython=True, parallel=False, fastmath=False)
+@jit(nopython=True, parallel=True, fastmath=True)
 def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     # Edge List Version in O(s)
     Z = np.zeros((n,k))
@@ -335,7 +335,7 @@ def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     return Z
 
 ############------------graph_encoder_embed_start----------------###############
-@jit(nopython=True, parallel=True, fastmath=False) # - this doesn't work, too many arguments
+@jit(nopython=True, parallel=True, fastmath=True) # - this doesn't work, too many arguments
 def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
     """
       input X is s*3 edg list: nodei, nodej, connection weight(i,j)
