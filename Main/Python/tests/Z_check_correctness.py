@@ -11,7 +11,7 @@ class TestStringMethods(unittest.TestCase):
         Z_Correct = np.load(files_dir + graph_path + "Z_CorrectResults.npy")
         Z_to_check = np.loadtxt(files_dir + graph_path + "Z_to_check.csv")
 
-        comparison = np.isclose(Z_Correct, Z_to_check)
+        comparison = np.isclose(Z_Correct, Z_to_check, atol=1e-06) # Atol for ligra - csv loses precision
 
         self.assertTrue(np.all(comparison))
 
@@ -21,7 +21,7 @@ class TestStringMethods(unittest.TestCase):
         Z_Correct = np.load(files_dir + graph_path + "Z_CorrectResults.npy")
         Z_to_check = np.loadtxt(files_dir + graph_path + "Z_to_check.csv")
 
-        comparison = np.isclose(Z_Correct, Z_to_check)
+        comparison = np.isclose(Z_Correct, Z_to_check, atol=1e-06) # Abs tolerance for ligra - csv loses precision
 
         self.assertTrue(np.all(comparison))
 
@@ -31,7 +31,7 @@ class TestStringMethods(unittest.TestCase):
         Z_Correct = np.load(files_dir + graph_path + "Z_CorrectResults.npy")
         Z_to_check = np.loadtxt(files_dir + graph_path + "Z_to_check.csv")
 
-        comparison = np.isclose(Z_Correct, Z_to_check)
+        comparison = np.isclose(Z_Correct, Z_to_check, atol=1e-06)
 
         self.assertTrue(np.all(comparison))
 
