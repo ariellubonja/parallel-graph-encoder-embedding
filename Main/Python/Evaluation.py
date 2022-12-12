@@ -87,42 +87,42 @@ if __name__ == '__main__':
     # # print(Dataset.X)
     # # print(Dataset.Y)
     # # print(Dataset.n)
+
+    # case = Case(n)
+    # case_10 = case.case_10() # This is O(n^2)
+    # case_10.summary()
+
     #
     # print("Running graph_encoder_embed()")
-    # # case = Case(n)
-    # # case_10 = case.case_10() # This is O(n^2)
-    # # case_10.summary()
-    #
     #
     # Z, W = graph_encoder_embed(Dataset.X[0], Dataset.Y, Dataset.n, Correlation = False)
     # print("Z:\n", Z)
     # # print(W)
 
-    # print("Loading LiveJournal graph - 1GB")
-    #
-    # G_edgelist = np.loadtxt("../../Data/soc-LiveJournal1.txt", dtype=np.int32)
-    #
-    # # Add column of ones - weights
-    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
-    #
-    # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
-    #
 
-    # Y = np.reshape(np.loadtxt("../../../../Downloads/liveJournal-Y50-sparse.txt", dtype=np.int16), (4847571, 1))
+    print("Loading LiveJournal graph - 1GB")
+
+    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/liveJournal.npy")
+
+    # Add column of ones - weights
+    G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+
+    n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+
+    Y = np.load("../../../Thesis-Graph-Data/Ys/liveJournal-Y50.npy")
 
     # print("Loading Orkut graph - 1.8GB")
     #
-    # G_edgelist = np.loadtxt("../../../Thesis-Graph-Data/orkut-svs.txt", dtype=np.int32)
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut.npy")
     #
     # # Add column of ones - weights
     # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
     #
     # n = int(np.max(G_edgelist[:, 1]) + 1)  # Nr. vertices
     #
-    # case = Case(n)
-    # case_10 = case.case_10() # This is O(n^2)
-    # case_10.summary()
-    #
+    # Y = np.load("../../../Thesis-Graph-Data/Ys/orkut-Y50.npy")
+
+
     # print("Loading Orkut-User2Group graph - 5.1GB")
     #
     # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut-groups.npy")
@@ -133,12 +133,6 @@ if __name__ == '__main__':
     # n = int(np.max(G_edgelist[:, 1]) + 1)  # Nr. vertices
     #
     # Y = np.load("../../../Thesis-Graph-Data/Ys/orkut-groups-Y40.npy")
-
-    # case = Case(n)
-    # case_10 = case.case_10() # This is O(n^2)
-    # case_10.summary()
-
-    # Y = np.reshape(np.loadtxt("../../../../Downloads/orkut-Y50-sparse.txt", dtype=np.int16), (3072441, 1))
 
     # print("Loading Twitch graph")
     #
@@ -171,20 +165,25 @@ if __name__ == '__main__':
     # Y = np.load("../../../Thesis-Graph-Data/twitch-Y20.npy")
 
 
-    print("Loading Pokec graph - 400MB")
+    # print("Loading Pokec graph - 400MB")
+    #
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/pokec.npy")
+    #
+    # # Add column of ones - weights
+    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+    #
+    # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+    #
+    # # Load Y from file
+    # Y = np.load("../../../Thesis-Graph-Data/Ys/pokec-Y50.npy")
 
-    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/pokec.npy")
 
-    # Add column of ones - weights
-    G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+    laplacian=True
+    print("Running GraphEncoderEmbed( laplacian =", laplacian, ")")
 
-    n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+    Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = laplacian)
 
-    Y = np.load("../../../Thesis-Graph-Data/pokec-Y50.npy")
-
-    print("Running GraphEncoderEmbed()")
-
-    Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = False)
-
-    np.savetxt("Z_to_check.csv", Z, fmt="%f")
+    print("Saving Embedding to file")
+    # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
+    np.save("Z_to_check.npy", Z)
 
