@@ -273,7 +273,7 @@ class DataPreprocess:
         return NewSets
 
 
-@jit(nopython=True, parallel=True, fastmath=True)
+@jit(nopython=True, parallel=False, fastmath=True)
 def X_prep_laplacian(X, n):
     """
       input X is a single S3 edge list
@@ -300,6 +300,8 @@ def X_prep_laplacian(X, n):
     # In Ligra, the above is calculated for us, and is present in v[i].getInDegree()/getOutDegree()
 
     D = np.power(D, -0.5)
+
+    # Make sure for X to be float here!
 
     for i in prange(s):
         X[i,2] *= (D[int(X[i,0])] * D[int(X[i,1])])[0] # Turns from ndarray of 1 element to float

@@ -100,23 +100,23 @@ if __name__ == '__main__':
     # # print(W)
 
 
-    print("Loading LiveJournal graph - 1GB")
-
-    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/liveJournal.npy")
-
-    # Add column of ones - weights
-    G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
-
-    n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
-
-    Y = np.load("../../../Thesis-Graph-Data/Ys/liveJournal-Y50.npy")
+    # print("Loading LiveJournal graph - 1GB")
+    #
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/liveJournalWgh.npy")
+    #
+    # # Add column of ones - weights
+    # # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+    #
+    # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+    #
+    # Y = np.load("../../../Thesis-Graph-Data/Ys/liveJournal-Y50.npy")
 
     # print("Loading Orkut graph - 1.8GB")
     #
-    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut.npy")
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkutWgh.npy")
     #
     # # Add column of ones - weights
-    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+    # # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
     #
     # n = int(np.max(G_edgelist[:, 1]) + 1)  # Nr. vertices
     #
@@ -125,52 +125,37 @@ if __name__ == '__main__':
 
     # print("Loading Orkut-User2Group graph - 5.1GB")
     #
-    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut-groups.npy")
-    #
-    # # Add column of ones - weights
-    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
-    #
-    # n = int(np.max(G_edgelist[:, 1]) + 1)  # Nr. vertices
-    #
-    # Y = np.load("../../../Thesis-Graph-Data/Ys/orkut-groups-Y40.npy")
-
-    # print("Loading Twitch graph")
-    #
-    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/twitch.npy")
-    # # G_edgelist = np.loadtxt("../../../Thesis-Graph-Data/twitch-SNAP-bidir-manually", delimiter=" ", dtype=np.int32)
-    #
-    # G_edgelist = G_edgelist[G_edgelist[:, 0].argsort()] # Sort by first column
-    #
-    # # Add column of ones - weights
-    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))#.astype(np.int32)
-    # # Make sure G_edgelist isn't restricted to int-s
-    #
-    # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
-    #
-    # Y = np.load("../../../Thesis-Graph-Data/Ys/twitch-Y20.npy")
-
-
-    # print("Loading Twitch weighted graph")
-    #
-    # # np.loadtxt(csv) is super slow. np.load(npy) is almost instant
-    # G_edgelist = np.load("../../../Thesis-Graph-Data/twitch-weighted.npy").astype(float)
-    #
-    # # G_edgelist = G_edgelist[G_edgelist[:, 0].argsort()] # Sort by first column
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut-groupsWgh.npy")
     #
     # # Add column of ones - weights
     # # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
     #
-    # n = 168114 # int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+    # n = int(np.max(G_edgelist[:, 1]))+ 1  # Nr. vertices
     #
-    # Y = np.load("../../../Thesis-Graph-Data/twitch-Y20.npy")
+    # Y = np.load("../../../Thesis-Graph-Data/Ys/orkut-groups-Y40.npy")
+
+    print("Loading Twitch graph")
+
+    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/twitchWgh.npy")
+    # G_edgelist = np.loadtxt("../../../Thesis-Graph-Data/twitch-SNAP-bidir-manually", delimiter=" ", dtype=np.int32)
+
+    G_edgelist = G_edgelist[G_edgelist[:, 0].argsort()] # Sort by first column
+
+    # Add column of ones - weights
+    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))#.astype(np.int32)
+    # Make sure G_edgelist isn't restricted to int-s
+
+    n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+
+    Y = np.load("../../../Thesis-Graph-Data/Ys/twitch-Y20.npy")
 
 
     # print("Loading Pokec graph - 400MB")
     #
-    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/pokec.npy")
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/pokecWgh.npy")
     #
     # # Add column of ones - weights
-    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+    # # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
     #
     # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
     #
@@ -181,9 +166,9 @@ if __name__ == '__main__':
     laplacian=True
     print("Running GraphEncoderEmbed( laplacian =", laplacian, ")")
 
-    Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = laplacian)
+    Z, _ = graph_encoder_embed(G_edgelist.astype(np.float64), Y, n, Correlation = False, Laplacian = laplacian)
 
     print("Saving Embedding to file")
     # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
-    np.save("Z_to_check.npy", Z)
+    np.save("Z_CorrectResults.npy", Z)
 
