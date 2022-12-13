@@ -273,7 +273,7 @@ class DataPreprocess:
         return NewSets
 
 
-@jit(nopython=True, parallel=False, fastmath=True)
+@jit(nopython=True, parallel=True, fastmath=True)
 def X_prep_laplacian(X, n):
     """
       input X is a single S3 edge list
