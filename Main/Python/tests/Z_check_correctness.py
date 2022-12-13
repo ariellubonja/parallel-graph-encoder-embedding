@@ -53,6 +53,16 @@ class TestAdjacency(unittest.TestCase):
         self.assertTrue(np.all(comparison))
 
 
+    def test_Friendster(self):
+        graph_path = "Friendster/"
+        Z_Correct = np.load(self.files_dir + graph_path + "Z_CorrectResults.npy")
+        Z_to_check = np.load(self.files_dir + graph_path + "Z_to_check.npy")
+
+        comparison = np.isclose(Z_Correct, Z_to_check, atol=1e-05)
+
+        self.assertTrue(np.all(comparison))
+
+
 class TestLaplacian(unittest.TestCase):
     files_dir = "../../../Experiments/Compare-Results/Laplacian/"
 
@@ -97,9 +107,20 @@ class TestLaplacian(unittest.TestCase):
         Z_Correct = np.load(self.files_dir + graph_path + "Z_CorrectResults.npy")
         Z_to_check = np.loadtxt(self.files_dir + graph_path + "Z_to_check.csv")
 
-        comparison = np.isclose(Z_Correct, Z_to_check, atol=1e-06)
+        comparison = np.isclose(Z_Correct, Z_to_check, atol=1e-05)
 
         self.assertTrue(np.all(comparison))
+
+
+    def test_Friendster(self):
+        graph_path = "Friendster/"
+        Z_Correct = np.load(self.files_dir + graph_path + "Z_CorrectResults.npy")
+        Z_to_check = np.load(self.files_dir + graph_path + "Z_to_check.npy")
+
+        comparison = np.isclose(Z_Correct, Z_to_check, atol=1e-05)
+
+        self.assertTrue(np.all(comparison))
+    
 
 if __name__ == '__main__':
     unittest.main()
