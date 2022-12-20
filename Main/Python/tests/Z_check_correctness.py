@@ -46,7 +46,7 @@ class TestAdjacency(unittest.TestCase):
     def test_Orkut_Groups(self):
         graph_path = "Orkut-groups/"
         Z_Correct = np.load(self.files_dir + graph_path + "Z_CorrectResults.npy")
-        Z_to_check = np.load(self.files_dir + graph_path + "Z_to_check.npy")
+        Z_to_check = np.loadtxt(self.files_dir + graph_path + "Z_to_check.csv")
 
         comparison = np.isclose(Z_Correct, Z_to_check, atol=1e-06)
 
