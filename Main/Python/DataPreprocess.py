@@ -308,7 +308,7 @@ def X_prep_laplacian(X, n):
 
     return X
 
-# @jit(nopython=True, parallel=False, fastmath=False)
+@jit(nopython=True, parallel=True, fastmath=True)
 def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     # Edge List Version in O(s)
     Z = np.zeros((n,k))
@@ -329,26 +329,26 @@ def numba_main_embedding(X, Y, W, possibility_detected, n, k):
             label_i = Y[v_i][0]
             label_j = Y[v_j][0]
 
-            if v_i==2521574 and v_j==0: # Debugging Orkut-Groups
-                gimi = 1
+            # if v_i==2521574 and v_j==0: # Debugging Orkut-Groups
+            #     gimi = 1
 
             if label_j >= 0: # >=0 means ground truth exists
                 # if v_i==0 and label_j==1:
                 #     gimi_debug = 1
                 Z[v_i, label_j] += W[v_j, label_j]*edg_i_j
-                if np.isclose(Z[0,1]-W[v_j, label_j]*edg_i_j, 0.026298194784934247):
-                    gimi = 2
+                # if np.isclose(Z[0,1]-W[v_j, label_j]*edg_i_j, 0.026298194784934247):
+                #     gimi = 2
             if (label_i >= 0) and (v_i != v_j):
                 # if v_j==0 and label_i==1:
                 #     gimi_debug = 1
                 Z[v_j, label_i] += W[v_i, label_i]*edg_i_j
-                if np.isclose(Z[0,1]-W[v_j, label_j]*edg_i_j, 0.026298194784934247):
-                    gimi = 2
+                # if np.isclose(Z[0,1]-W[v_j, label_j]*edg_i_j, 0.026298194784934247):
+                #     gimi = 2
 
     return Z
 
 ############------------graph_encoder_embed_start----------------###############
-# @jit(nopython=True, parallel=False, fastmath=False) # - this doesn't work, too many arguments
+@jit(nopython=True, parallel=True, fastmath=True) # - this doesn't work, too many arguments
 def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
     """
       input X is s*3 edg list: nodei, nodej, connection weight(i,j)
