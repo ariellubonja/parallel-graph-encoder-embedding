@@ -104,6 +104,7 @@ if __name__ == '__main__':
     #
     # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/liveJournalWgh.npy")
     #
+    # # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/liveJournal.npy")
     # # Add column of ones - weights
     # # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
     #
@@ -123,16 +124,18 @@ if __name__ == '__main__':
     # Y = np.load("../../../Thesis-Graph-Data/Ys/orkut-Y50.npy")
 
 
-    # print("Loading Orkut-User2Group graph - 5.1GB")
+    print("Loading Orkut-User2Group graph - 5.1GB")
 
-    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut-groupsWgh.npy")
-
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut-groupsUnw.npy")
     # # Add column of ones - weights
-    # # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
 
-    # n = int(np.max(G_edgelist[:, 1]))+ 1  # Nr. vertices
+    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/orkut-groupsWgh.npy")
 
-    # Y = np.load("../../../Thesis-Graph-Data/Ys/orkut-groups-Y40.npy")
+
+    n = int(np.max(G_edgelist[:, 1])) + 1  # Nr. vertices +1 bcs we index G[v] - 0-indexed
+
+    Y = np.load("../../../Thesis-Graph-Data/Ys/orkut-groups-Y40.npy")
 
     # print("Loading Twitch graph")
     #
@@ -163,20 +166,20 @@ if __name__ == '__main__':
     # Y = np.load("../../../Thesis-Graph-Data/Ys/pokec-Y50.npy")
 
 
-    print("Loading Friendster graph - 31GB")
-    
-    G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/friendsterWgh.npy")
-    
-    # Add column of ones - weights
-    # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
-    
-    n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
-    
-    # Load Y from file
-    Y = np.load("../../../Thesis-Graph-Data/Ys/friendster-Y50.npy")
+    # print("Loading Friendster graph - 31GB")
+    #
+    # G_edgelist = np.load("../../../Thesis-Graph-Data/NPY-graphs/friendsterWgh.npy")
+    #
+    # # Add column of ones - weights
+    # # G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1))))
+    #
+    # n = int(np.max(G_edgelist[:,1]) + 1) # Nr. vertices
+    #
+    # # Load Y from file
+    # Y = np.load("../../../Thesis-Graph-Data/Ys/friendster-Y50.npy")
 
 
-    laplacian=True
+    laplacian=False
     print("Running GraphEncoderEmbed( laplacian =", laplacian, ")")
 
     Z, _ = graph_encoder_embed(G_edgelist.astype(np.float64), Y, n, Correlation = False, Laplacian = laplacian)
