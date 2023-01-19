@@ -69,6 +69,17 @@ class Encoder_case:
 
 
 if __name__ == '__main__':
+    
+    # https://www.tutorialspoint.com/python/python_command_line_arguments.htm
+    import argparse
+
+    argParser = argparse.ArgumentParser()
+    argParser.add_argument("-fn", "--filename", help="Input File name. .npy Edgelist required")
+    
+    args = argParser.parse_args()
+
+    print("args.name=%s" % args.filename)
+    
     # A = np.ones((5,5))
     # A[0,4] = 0
     # A[4,0] = 0
