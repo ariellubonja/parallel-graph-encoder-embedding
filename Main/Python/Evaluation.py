@@ -4,6 +4,7 @@ from sklearn.metrics import adjusted_rand_score
 import numpy as np
 from utils.create_test_case import Case
 from DataPreprocess import graph_encoder_embed
+import Clustering
 
 class Evaluation:
     def GNN_supervise_test(self, gnn, z_test, y_test):
@@ -56,6 +57,7 @@ class Evaluation:
 
 
 # Code to test functions
+# Use this to create the DataSets object required in many functions
 class Encoder_case:
     def __init__(self, A,Y,n):
         Encoder_case.X = A
@@ -82,6 +84,7 @@ if __name__ == '__main__':
 
 
     if args.filename is not None:
+        # For testing, load Drug Embedding graph
         print("Loading user-defined graph (unsupervised)")
 
         G_edgelist = np.load(args.filename)
@@ -91,7 +94,14 @@ if __name__ == '__main__':
 
         n = int(np.max([np.max(G_edgelist[:,0]), np.max(G_edgelist[:,1])])) # Nr. vertices
 
-        Y = np.full(shape=(n,1), fill_value=-1, dtype=np.int32)
+        # Y = np.full(shape=(n,1), fill_value=-1, dtype=np.int32)
+        Y = [128] # In Clustering, Y needs to be a range of possible clustering dimensions
+
+        # This is the DataSets object thoughout the code
+        encoder_case = Encoder_case(G_edgelist, Y, n)
+
+        cl = Clustering(encoder_case, {})
+
     else:
         # A = np.ones((5,5))
         # A[0,4] = 0
@@ -203,12 +213,12 @@ if __name__ == '__main__':
         # Y = np.load("../../../Thesis-Graph-Data/Ys/friendster-Y50.npy")
 
 
-    laplacian=False
-    print("Running GraphEncoderEmbed( laplacian =", laplacian, ")")
+        laplacian=False
+        print("Running GraphEncoderEmbed( laplacian =", laplacian, ")")
 
-    Z, _ = graph_encoder_embed(G_edgelist.astype(np.float64), Y, n, Correlation = False, Laplacian = laplacian)
+        Z, _ = graph_encoder_embed(G_edgelist.astype(np.float64), Y, n, Correlation = False, Laplacian = laplacian)
 
-    print("Saving Embedding to file")
-    # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
-    np.save("EmbeddingResults.npy", Z)
+        print("Saving Embedding to file")
+        # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
+        np.save("EmbeddingResults.npy", Z)
 
