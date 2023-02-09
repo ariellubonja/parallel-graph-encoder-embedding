@@ -16,7 +16,7 @@ class Clustering:
         self.kwargs = self.kwargs_construct(**kwargs)
         self.DataSets = DataSets
         self.cluster_size_range = self.cluster_size_check()
-        self.K = DataSets.Y[0]
+        self.K = DataSets.Y # In this case, Y is used as a list of possible class sizes. Not intuitive
 
 
     def kwargs_construct(self, **kwargs):
@@ -56,9 +56,9 @@ class Clustering:
             for r in range(kwargs['MaxIter']):
                 [Zt,Wt] = multi_graph_encoder_embed(DataSets, Y_temp)
 
-                if DataSets.attributes:
-                    # add U to Z side by side
-                    Zt = np.concatenate((Zt, DataSets.U), axis=1)
+                # if DataSets.attributes:
+                #     # add U to Z side by side
+                #     Zt = np.concatenate((Zt, DataSets.U), axis=1)
                 kmeans = KMeans(n_clusters=K, max_iter = kwargs['MaxIter']).fit(Zt)
                 labels = kmeans.labels_ # shape(n,)
                 # sum_in_cluster = kmeans.inertia_ # sum of distance within cluster (k,1)

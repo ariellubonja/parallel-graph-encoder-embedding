@@ -87,12 +87,12 @@ if __name__ == '__main__':
         # For testing, load Drug Embedding graph
         print("Loading user-defined graph (unsupervised)")
 
-        G_edgelist = np.load(args.filename)
+        G_edgelist = np.loadtxt(args.filename, dtype=np.int32)
 
         # Add column of ones - weights
         G_edgelist = np.hstack((G_edgelist, np.ones((G_edgelist.shape[0], 1)))).astype(np.int32)
 
-        n = int(np.max([np.max(G_edgelist[:,0]), np.max(G_edgelist[:,1])])) # Nr. vertices
+        n = int(np.max([np.max(G_edgelist[:,0]), np.max(G_edgelist[:,1])])) + 1 # Nr. vertices
 
         # Y = np.full(shape=(n,1), fill_value=-1, dtype=np.int32)
         Y = [128] # In Clustering, Y needs to be a range of possible clustering dimensions
@@ -100,7 +100,10 @@ if __name__ == '__main__':
         # This is the DataSets object thoughout the code
         encoder_case = Encoder_case(G_edgelist, Y, n)
 
-        cl = Clustering(encoder_case, {})
+        # https://stackoverflow.com/questions/4534438/typeerror-module-object-is-not-callable
+        cl = Clustering.Clustering(encoder_case)
+
+        Z, _, _, _ = cl.cluster_main()
 
     else:
         # A = np.ones((5,5))
@@ -218,7 +221,7 @@ if __name__ == '__main__':
 
         Z, _ = graph_encoder_embed(G_edgelist.astype(np.float64), Y, n, Correlation = False, Laplacian = laplacian)
 
-        print("Saving Embedding to file")
-        # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
-        np.save("EmbeddingResults.npy", Z)
+    print("Saving Embedding to file")
+    # np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
+    np.save("EmbeddingResults.npy", Z)
 

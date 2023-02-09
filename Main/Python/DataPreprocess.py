@@ -273,7 +273,7 @@ class DataPreprocess:
         return NewSets
 
 
-@jit(nopython=True, parallel=False, fastmath=False)
+# @jit(nopython=True, parallel=False, fastmath=False)
 def X_prep_laplacian(X, n):
     """
       input X is a single S3 edge list
@@ -308,7 +308,7 @@ def X_prep_laplacian(X, n):
 
     return X
 
-@jit(nopython=True, parallel=True, fastmath=True)
+# @jit(nopython=True, parallel=True, fastmath=True)
 def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     # Edge List Version in O(s)
     Z = np.zeros((n,k))
@@ -348,7 +348,7 @@ def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     return Z
 
 ############------------graph_encoder_embed_start----------------###############
-@jit(nopython=True, parallel=True, fastmath=True) # - this doesn't work, too many arguments
+# @jit(nopython=True, parallel=True, fastmath=True) # - this doesn't work, too many arguments
 def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
     """
       input X is s*3 edg list: nodei, nodej, connection weight(i,j)
@@ -423,24 +423,33 @@ def multi_graph_encoder_embed(DataSets, Y):
 
     X = DataSets.X
     n = DataSets.n
-    U = DataSets.U
-    Graph_count = DataSets.Graph_count
-    attributes = DataSets.attributes
-    kwargs = DataSets.kwargs
+    # U = DataSets.U # TODO Ariel I don't know what this is for
+    try: # Ariel - I did this
+        Graph_count = DataSets.Graph_count
+    except AttributeError:
+        Graph_count = 1
+    # attributes = DataSets.attributes
+    try:
+        kwargs = DataSets.kwargs
+    except AttributeError:
+        kwargs = {}
 
     W = []
 
     for i in range(Graph_count):
         if i == 0:
-            [Z, Wi] = graph_encoder_embed(X[i],Y,n,**kwargs)
+            if Graph_count == 1:
+                [Z, Wi] = graph_encoder_embed(X, Y, n, **kwargs)
+            else:
+                [Z, Wi] = graph_encoder_embed(X[i],Y,n,**kwargs)
         else:
             [Z_new, Wi] = graph_encoder_embed(X[i],Y,n,**kwargs)
             Z = np.concatenate((Z, Z_new), axis=1)
         W.append(Wi)
 
     # if there is attributes matrix U provided, add U
-    if attributes:
-        # add U to Z side by side
-        Z = np.concatenate((Z, U), axis=1)
+    # if attributes:
+    #     # add U to Z side by side
+    #     Z = np.concatenate((Z, U), axis=1)
 
     return Z, W
