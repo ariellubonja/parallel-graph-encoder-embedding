@@ -59,7 +59,7 @@ class Clustering:
                 # if DataSets.attributes:
                 #     # add U to Z side by side
                 #     Zt = np.concatenate((Zt, DataSets.U), axis=1)
-                kmeans = KMeans(n_clusters=K, max_iter = kwargs['MaxIter']).fit(Zt)
+                kmeans = KMeans(n_clusters=K, max_iter = kwargs['MaxIter'], verbose=1).fit(Zt)
                 labels = kmeans.labels_ # shape(n,)
                 # sum_in_cluster = kmeans.inertia_ # sum of distance within cluster (k,1)
                 dis_to_centors = kmeans.transform(Zt)
