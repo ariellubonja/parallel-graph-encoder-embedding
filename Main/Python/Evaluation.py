@@ -96,16 +96,29 @@ def loadGraph(filepath, weighted, randomY=True, yPath=None):
 
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description='Script to load a graph.')
+
+    # Add the command line arguments
+    parser.add_argument('filepath', type=str, help='Path to the graph file')
+    parser.add_argument('--weighted', action='store_true', help='Specify if the graph is weighted')
+    parser.add_argument('--randomY', action='store_true', help='Specify if random Y values should be used')
+    parser.add_argument('--yPath', type=str, help='Path to the Y labels (Required if --randomY=False)')
+
+    parser.add_argument('--laplacian', action='store_true', default=False, help='Use Graph Laplacian or Adjacency matrix?')
+    parser.add_argument('--correlation', action='store_true', default=False)
     
-    G_edgelist, Y, n = loadGraph("/home/ariel/prog/leiden-runtime-experiments/carey-tsg-graphs/edgelist-msr-n32277-T24-forRB2.csv", weighted=True, randomY=True)
+    # Parse the command line arguments
+    args = parser.parse_args()
+    
+    G_edgelist, Y, n = loadGraph(args.filepath, args.weighted, args.randomY, args.yPath)
 
 
-    laplacian=False
     print("Running GraphEncoderEmbed( laplacian =", laplacian, ")")
 
     Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = laplacian)
 
-    print("Saving Embedding to file")
-    np.savetxt("Z_CorrectResults.csv", Z, fmt="%f")
+    print("Saving Embedding to embeddings.csv")
+    np.savetxt("embeddings.csv", Z, fmt="%f")
     # np.save("Z_CorrectResults.npy", Z)
 
