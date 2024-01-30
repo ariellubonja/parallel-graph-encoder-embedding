@@ -3,7 +3,8 @@ import numpy as np
 import DataPreprocess
 import timeit
 
-
+erdos_10_degree_graphs_npy_path = "/home/ubuntu/prog/erdos-renyi-10-degree/NPY"
+erdos_labels_path = "/home/ubuntu/prog/erdos-renyi-10-degree/Ys"
 
 def setup_gee(graph_name):
     # Run this every time to not cache results
@@ -37,7 +38,10 @@ graph_files.sort(key=lambda x: int(x.split('-')[0].split('_')[0]))
 
 # Loop over each graph file
 for graph_name in graph_files:
-    print("\n\nRunning experiments for", graph_name, '\n\n')
+    with open("runtime_results.txt", "a") as result_file:
+        result_file.write(f"\n\n{graph_name}\n\n")
+
+    print(f"\n\nRunning experiments for {graph_name}\n")
 
     for i in range(7):
         # Setup GEE (outside of timing)
@@ -45,9 +49,9 @@ for graph_name in graph_files:
 
         # Time the run_gee function
         runtime = timeit.timeit(lambda: run_gee(erdos_labels_path, graph_name, G_edgelist, n), number=1)
-        result_string = f"Experiment {i+1} for {graph_name}: {runtime} seconds\n"
+        result_string = f"Experiment {i+1} for {graph_name}: {runtime} seconds"
 
         # Print and write the result to runtime_results.txt
         print(result_string)
         with open("runtime_results.txt", "a") as result_file:
-            result_file.write(result_string)
+            result_file.write(str(runtime)+'\n')
