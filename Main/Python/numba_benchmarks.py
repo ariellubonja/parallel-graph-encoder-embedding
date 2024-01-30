@@ -3,8 +3,10 @@ import numpy as np
 import DataPreprocess
 import timeit
 
-erdos_10_degree_graphs_npy_path = "/home/ubuntu/prog/erdos-renyi-10-degree/NPY"
-erdos_labels_path = "/home/ubuntu/prog/erdos-renyi-10-degree/Ys"
+base_dir = "/home/ubuntu/prog/erdos-new"
+
+erdos_10_degree_graphs_npy_path = os.path.join(base_dir, "NPY")
+erdos_labels_path = os.path.join(base_dir, "Ys")
 
 def setup_gee(graph_name):
     # Run this every time to not cache results
