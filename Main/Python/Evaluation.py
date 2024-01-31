@@ -4,6 +4,7 @@ from sklearn.metrics import adjusted_rand_score
 import numpy as np
 from utils.create_test_case import Case
 from DataPreprocess import graph_encoder_embed
+import argparse
 
 class Evaluation:
     def GNN_supervise_test(self, gnn, z_test, y_test):
@@ -100,9 +101,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Script to load a graph.')
 
     # Add the command line arguments
-    parser.add_argument('filepath', type=str, help='Path to the graph file')
-    parser.add_argument('--weighted', action='store_true', help='Specify if the graph is weighted')
-    parser.add_argument('--randomY', action='store_true', help='Specify if random Y values should be used')
+    parser.add_argument('filepath', type=str, help='Path to the graph file', required=True)
+    parser.add_argument('--weighted', action='store_true', help='Specify if the graph is weighted', default=False)
+    parser.add_argument('--randomY', action='store_true', help='Specify if random Y values should be used', default=False)
     parser.add_argument('--yPath', type=str, help='Path to the Y labels (Required if --randomY=False)')
 
     parser.add_argument('--laplacian', action='store_true', default=False, help='Use Graph Laplacian or Adjacency matrix?')
