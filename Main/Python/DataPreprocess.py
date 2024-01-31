@@ -2,9 +2,11 @@ import copy
 
 import numpy as np
 from numpy import linalg as LA
-from numba import jit, prange
+from numba import njit, prange
 # from tensorflow.keras.utils import to_categorical
 
+numba_parallel = False
+numba_fastmath = False
 
 class DataPreprocess:
     def __init__(self, Dataset_input, **kwargs):
@@ -273,7 +275,8 @@ class DataPreprocess:
         return NewSets
 
 
-@jit(nopython=True, parallel=False, fastmath=False)
+# Equivalent to @jit(nopython=True)
+@njit(parallel=numba_parallel, fastmath=numba_fastmath)
 def X_prep_laplacian(X, n):
     """
       input X is a single S3 edge list
@@ -308,7 +311,7 @@ def X_prep_laplacian(X, n):
 
     return X
 
-@jit(nopython=True, parallel=True, fastmath=True)
+@njit(parallel=numba_parallel, fastmath=numba_fastmath)
 def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     # Edge List Version in O(s)
     Z = np.zeros((n,k))
@@ -348,7 +351,7 @@ def numba_main_embedding(X, Y, W, possibility_detected, n, k):
     return Z
 
 ############------------graph_encoder_embed_start----------------###############
-@jit(nopython=True, parallel=True, fastmath=True) # - this doesn't work, too many arguments
+@njit(parallel=numba_parallel, fastmath=numba_fastmath) # - this doesn't work, too many arguments
 def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
     """
       input X is s*3 edg list: nodei, nodej, connection weight(i,j)
