@@ -101,7 +101,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Script to load a graph.')
 
     # Add the command line arguments
-    parser.add_argument('filepath', type=str, help='Path to the graph file', required=True)
+    parser.add_argument('filepath', type=str, help='Path to the graph file')
     parser.add_argument('--weighted', action='store_true', help='Specify if the graph is weighted', default=False)
     parser.add_argument('--randomY', action='store_true', help='Specify if random Y values should be used', default=False)
     parser.add_argument('--yPath', type=str, help='Path to the Y labels (Required if --randomY=False)')
