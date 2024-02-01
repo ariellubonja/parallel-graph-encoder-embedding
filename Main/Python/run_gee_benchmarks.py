@@ -57,14 +57,21 @@ if __name__ == '__main__':
     # Sort files by number of nodes (optional, for structured progression)
     graph_files.sort(key=lambda x: int(x.split('-')[0].split('_')[0]))
 
+    if args.machine_name == 'm5.12xlarge':
+        result_file_name = "runtime_results/m5_12xlarge.txt"
+    else:
+        result_file_name = "runtime_results/m5_metal.txt"
+
+    with open(result_file_name, "a") as result_file:
+        if args.numba == 'None':
+            result_file.write(f"\n\nGEE Stock\n\n")
+        elif args.numba == 'Serial':
+            result_file.write(f"\n\nNumba Serial\n\n")
+        else:
+            result_file.write(f"\n\nNumba Parallel\n\n")
+
     # Loop over each graph file
     for graph_name in graph_files:
-
-        if args.machine_name == 'm5.12xlarge':
-            result_file_name = "runtime_results/m5_12xlarge.txt"
-        else:  # if args.machine_name == 'm5.metal':
-            result_file_name = "runtime_results/m5_metal.txt"
-
         with open(result_file_name, "a") as result_file:
             result_file.write(f"\n\n{graph_name}\n\n")
 
