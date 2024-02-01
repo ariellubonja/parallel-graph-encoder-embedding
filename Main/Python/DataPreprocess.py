@@ -10,7 +10,7 @@ from numba import njit, prange
 #    numba_parallel = True
 #else:
 #    numba_parallel = False
-numba_parallel = True
+numba_parallel = False
 numba_fastmath = False
 
 class DataPreprocess:
