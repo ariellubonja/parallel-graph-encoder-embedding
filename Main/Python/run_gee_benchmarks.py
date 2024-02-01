@@ -42,6 +42,7 @@ if __name__ == '__main__':
     parser.add_argument('--numba', type=str, choices=['None', 'Parallel', 'Serial'], default='None',
                         help="Whether to use numba for GEE or not, and if so, Serial or Parallel")
     parser.add_argument('--graphs_base_dir', type=str, default='/home/ubuntu/prog/erdos-renyi-10-degree/',)
+    parser.add_argument('--nr_experiments', type=int, default=7,)
 
     args = parser.parse_args()
 
@@ -69,7 +70,7 @@ if __name__ == '__main__':
 
         print(f"\n\nRunning experiments for {graph_name}\n")
 
-        for i in range(7):
+        for i in range(args.nr_experiments):
             # Setup GEE (outside of timing)
             G_edgelist, n = setup_gee(graph_name)
 
