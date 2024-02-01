@@ -22,7 +22,7 @@ def setup_gee(graph_name):
     return G_edgelist, n
 
 
-def run_gee(erdos_labels_path, graph_name, G_edgelist, n, numba='Parallel'):
+def run_gee(erdos_labels_path, graph_name, G_edgelist, n, numba):
     Y = np.load(os.path.join(erdos_labels_path , graph_name)) # For Ligra fairness - ligra cannot preload this
 
     os.environ['NUMBA'] = numba
@@ -82,7 +82,7 @@ if __name__ == '__main__':
             G_edgelist, n = setup_gee(graph_name)
 
             # Time the run_gee function
-            runtime = timeit.timeit(lambda: run_gee(erdos_labels_path, graph_name, G_edgelist, n), number=1)
+            runtime = timeit.timeit(lambda: run_gee(erdos_labels_path, graph_name, G_edgelist, n, numba=args.numba), number=1)
             result_string = f"Experiment {i+1} for {graph_name}: {runtime} seconds"
 
             # Print and write the result to runtime_results.txt
