@@ -437,7 +437,7 @@ def numba_graph_encoder_embed(X, Y, n, Correlation=False, Laplacian=False):
     """
 #     defaultKwargs = {'Correlation': True}
 #     kwargs = { **defaultKwargs, **kwargs}
-    print(f"Running numba ", numba_parallel)
+    print(f"Running numba with parallel =", numba_parallel)
 
     #If Y has more than one dimention , Y is the range of cluster size for a vertex. e.g. [2,10], [2,5,6]
     # check if Y is the possibility version. e.g.Y: n*k each row list the possibility for each class[0.9, 0.1, 0, ......]
