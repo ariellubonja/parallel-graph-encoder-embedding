@@ -67,8 +67,11 @@ class Encoder_case:
 
 def loadGraph(filepath, weighted, randomY=True, yPath=None):
     print("Loading " + filepath)
-    
-    G_edgelist = np.loadtxt(filepath, delimiter=",")
+
+    if 'npy' in filepath:
+        G_edgelist = np.load(filepath)
+    else:
+        G_edgelist = np.loadtxt(filepath, delimiter=",")
     
     if not weighted:
 	# Add column of ones - weights
