@@ -518,7 +518,7 @@ def graph_encoder_embed(X, Y, n, Correlation=False, Laplacian=False):
     W = np.zeros((n,k))
 
     if Laplacian:
-        X = numba_X_prep_laplacian(X, n)
+        X = X_prep_laplacian(X, n)
 
     if possibility_detected:
         # sum Y (each row of Y is a vector of posibility for each class), then do element divid nk.
@@ -534,7 +534,7 @@ def graph_encoder_embed(X, Y, n, Correlation=False, Laplacian=False):
             if k_i >=0:
                 W[i,k_i] = 1/nk[0,k_i]
 
-    Z = numba_main_embedding(X, Y, W, possibility_detected, n, k)
+    Z = main_embedding(X, Y, W, possibility_detected, n, k)
 
     # Calculate each row's 2-norm (Euclidean distance).
     # e.g.row_x: [ele_i,ele_j,ele_k]. norm2 = sqr(sum(2^2+1^2+4^2))
