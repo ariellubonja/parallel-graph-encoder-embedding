@@ -6,10 +6,11 @@ from numpy import linalg as LA
 from numba import njit, prange
 # from tensorflow.keras.utils import to_categorical
 
-if os.environ.get('NUMBA') == 'Parallel':
-    numba_parallel = True
-else:
-    numba_parallel = False
+#if os.environ.get('NUMBA') == 'Parallel':
+#    numba_parallel = True
+#else:
+#    numba_parallel = False
+numba_parallel = True
 numba_fastmath = False
 
 class DataPreprocess:
