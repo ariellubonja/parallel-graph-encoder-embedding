@@ -28,8 +28,10 @@ def run_gee(erdos_labels_path, graph_name, G_edgelist, n, numba):
     os.environ['NUMBA'] = numba
 
     if numba == 'None':
+        print("Running GEE without numba")
         _ = DataPreprocess.graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = False)
     else: # if numba == 'Parallel' or 'Serial'
+        print(f"Running GEE with numba {numba}")
         _ = DataPreprocess.numba_graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = False)
 
 
