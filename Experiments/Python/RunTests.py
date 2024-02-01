@@ -31,8 +31,8 @@ if __name__ == '__main__':
     print(Dataset.n)
 
 
-    from Main.Python.DataPreprocess import graph_encoder_embed
+    from Main.Python.DataPreprocess import numba_graph_encoder_embed
 
-    Z, W = graph_encoder_embed(Dataset.X[0], Dataset.Y, Dataset.n, Correlation = False)
+    Z, W = numba_graph_encoder_embed(Dataset.X[0], Dataset.Y, Dataset.n, Correlation = False)
     print(Z)
     print(W)

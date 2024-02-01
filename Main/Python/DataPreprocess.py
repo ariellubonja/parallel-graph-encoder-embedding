@@ -1,11 +1,15 @@
 import copy
+import os
 
 import numpy as np
 from numpy import linalg as LA
 from numba import njit, prange
 # from tensorflow.keras.utils import to_categorical
 
-numba_parallel = False
+if os.environ.get('NUMBA') == 'Parallel':
+    numba_parallel = True
+else:
+    numba_parallel = False
 numba_fastmath = False
 
 class DataPreprocess:
@@ -277,6 +281,41 @@ class DataPreprocess:
 
 # Equivalent to @jit(nopython=True)
 @njit(parallel=numba_parallel, fastmath=numba_fastmath)
+def numba_X_prep_laplacian(X, n):
+    """
+      input X is a single S3 edge list
+      this adds Diagnal augement and Laplacian normalization to the edge list
+      Taken from DataPreprocesss.single_X_prep()
+    """
+
+    s = X.shape[0] # get the row number of the edg list
+    # if kwargs["Laplacian"]:
+    D = np.zeros((n,1), dtype=np.int32)
+
+    n_edges = len(X)
+
+    # for row in X: # Iterate over edges
+    for i in prange(n_edges): # prange - parallel range from Numba
+        [v_i, v_j, edg_i_j] = X[i,:]
+        v_i = int(v_i)
+        v_j = int(v_j)
+        edg_i_j = int(edg_i_j)
+
+        D[v_i] += edg_i_j
+        if v_i != v_j: # Only fails for self-edges
+            D[v_j] += edg_i_j
+    # In Ligra, the above is calculated for us, and is present in v[i].getInDegree()/getOutDegree()
+
+    D = np.power(D, -0.5)
+
+    # Make sure for X to be float here!
+
+    for i in prange(s):
+        X[i,2] *= (D[int(X[i,0])] * D[int(X[i,1])])[0] # Turns from ndarray of 1 element to float
+
+    return X
+
+
 def X_prep_laplacian(X, n):
     """
       input X is a single S3 edge list
@@ -350,9 +389,48 @@ def numba_main_embedding(X, Y, W, possibility_detected, n, k):
 
     return Z
 
+
+def main_embedding(X, Y, W, possibility_detected, n, k):
+    # Edge List Version in O(s)
+    Z = np.zeros((n,k))
+    # i = 0
+
+    n_edges = len(X)
+
+    for i in range(n_edges): # TODO prange causes missed writes!
+        [v_i, v_j, edg_i_j] = X[i,:]
+        v_i = int(v_i)
+        v_j = int(v_j)
+        if possibility_detected:
+            for label_j in range(k):
+                Z[v_i, label_j] = Z[v_i, label_j] + W[v_j, label_j]*edg_i_j
+                if v_i != v_j:
+                    Z[v_j, label_j] = Z[v_j, label_j] + W[v_i, label_j]*edg_i_j
+        else:
+            label_i = Y[v_i][0]
+            label_j = Y[v_j][0]
+
+            # if v_i==2521574 and v_j==0: # Debugging Orkut-Groups
+            #     gimi = 1
+
+            if label_j >= 0: # >=0 means ground truth exists
+                # if v_i==0 and label_j==1:
+                #     gimi_debug = 1
+                Z[v_i, label_j] += W[v_j, label_j]*edg_i_j
+                # if np.isclose(Z[0,1]-W[v_j, label_j]*edg_i_j, 0.026298194784934247):
+                #     gimi = 2
+            if (label_i >= 0) and (v_i != v_j):
+                # if v_j==0 and label_i==1:
+                #     gimi_debug = 1
+                Z[v_j, label_i] += W[v_i, label_i]*edg_i_j
+                # if np.isclose(Z[0,1]-W[v_j, label_j]*edg_i_j, 0.026298194784934247):
+                #     gimi = 2
+
+    return Z
+
 ############------------graph_encoder_embed_start----------------###############
 @njit(parallel=numba_parallel, fastmath=numba_fastmath) # - this doesn't work, too many arguments
-def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
+def numba_graph_encoder_embed(X, Y, n, Correlation=False, Laplacian=False):
     """
       input X is s*3 edg list: nodei, nodej, connection weight(i,j)
       graph embedding function
@@ -377,7 +455,70 @@ def graph_encoder_embed(X,Y,n,Correlation=False,Laplacian=False):
     W = np.zeros((n,k))
 
     if Laplacian:
-        X = X_prep_laplacian(X, n)
+        X = numba_X_prep_laplacian(X, n)
+
+    if possibility_detected:
+        # sum Y (each row of Y is a vector of posibility for each class), then do element divid nk.
+        # Ariel: I think this is the Laplacian part
+        nk=np.sum(Y, axis=0)
+        W=Y/nk
+    else:
+        for i in prange(k):
+            nk[0,i] = np.count_nonzero(Y[:,0]==i)
+
+        for i in prange(Y.shape[0]): # Y.shape[0] == n_vertices
+            k_i = Y[i,0]
+            if k_i >=0:
+                W[i,k_i] = 1/nk[0,k_i]
+
+    Z = numba_main_embedding(X, Y, W, possibility_detected, n, k)
+
+    # Calculate each row's 2-norm (Euclidean distance).
+    # e.g.row_x: [ele_i,ele_j,ele_k]. norm2 = sqr(sum(2^2+1^2+4^2))
+    # then divide each element by their row norm
+    # e.g. [ele_i/norm2,ele_j/norm2,ele_k/norm2]
+
+    if Correlation:
+        # row_norm = LA.norm(Z, axis = 1) # Len n_nodes
+        # Numba doesn't support axis on LA.norm() - need to rewrite
+        # confirmed correct for Twitch using np.isclose()
+        row_norm = np.empty(n)
+
+        for i in prange(n):
+            row_norm[i] = LA.norm(Z[i,:])
+
+        reshape_row_norm = np.reshape(row_norm, (n,1))
+        # Z = np.nan_to_num(Z/reshape_row_norm) # why this hack???
+
+    return Z, W
+
+
+def graph_encoder_embed(X, Y, n, Correlation=False, Laplacian=False):
+    """
+      input X is s*3 edg list: nodei, nodej, connection weight(i,j)
+      graph embedding function
+    """
+#     defaultKwargs = {'Correlation': True}
+#     kwargs = { **defaultKwargs, **kwargs}
+
+    #If Y has more than one dimention , Y is the range of cluster size for a vertex. e.g. [2,10], [2,5,6]
+    # check if Y is the possibility version. e.g.Y: n*k each row list the possibility for each class[0.9, 0.1, 0, ......]
+    possibility_detected = False
+    if Y.shape[1] > 1:
+        k = Y.shape[1]
+        possibility_detected = True
+    else:
+        # assign k to the max along the first column
+        # Note for python, label Y starts from 0. Python index starts from 0. thus size k should be max + 1
+        k = Y[:,0].max() + 1
+
+    #nk: 1*n array, contains the number of observations in each class
+    #W: encoder marix. W[i,k] = {1/nk if Yi==k, otherwise 0}
+    nk = np.zeros((1,k))
+    W = np.zeros((n,k))
+
+    if Laplacian:
+        X = numba_X_prep_laplacian(X, n)
 
     if possibility_detected:
         # sum Y (each row of Y is a vector of posibility for each class), then do element divid nk.
@@ -435,9 +576,9 @@ def multi_graph_encoder_embed(DataSets, Y):
 
     for i in range(Graph_count):
         if i == 0:
-            [Z, Wi] = graph_encoder_embed(X[i],Y,n,**kwargs)
+            [Z, Wi] = numba_graph_encoder_embed(X[i], Y, n, **kwargs)
         else:
-            [Z_new, Wi] = graph_encoder_embed(X[i],Y,n,**kwargs)
+            [Z_new, Wi] = numba_graph_encoder_embed(X[i], Y, n, **kwargs)
             Z = np.concatenate((Z, Z_new), axis=1)
         W.append(Wi)
 

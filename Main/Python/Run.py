@@ -3,7 +3,7 @@ import numpy as np
 
 # Supress/hide the warning
 # invalide devide resutls will be nan
-from Main.Python.DataPreprocess import DataPreprocess, graph_encoder_embed
+from Main.Python.DataPreprocess import DataPreprocess, numba_graph_encoder_embed
 from Main.Python.Clustering import Clustering
 from Main.Python.Evaluation import Evaluation
 from Main.Python.GNN import GNN

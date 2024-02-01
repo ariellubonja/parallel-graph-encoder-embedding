@@ -3,7 +3,7 @@ from sklearn.metrics import adjusted_rand_score
 # from tensorflow.keras.utils import to_categorical
 import numpy as np
 from utils.create_test_case import Case
-from DataPreprocess import graph_encoder_embed
+from DataPreprocess import numba_graph_encoder_embed
 import argparse
 
 class Evaluation:
@@ -115,9 +115,9 @@ if __name__ == '__main__':
     G_edgelist, Y, n = loadGraph(args.filepath, args.weighted, args.randomY, args.yPath)
 
 
-    print("Running GraphEncoderEmbed( laplacian =", laplacian, ")")
+    print("Running GraphEncoderEmbed( laplacian =", args.laplacian, ")")
 
-    Z, W = graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = laplacian)
+    Z, W = numba_graph_encoder_embed(G_edgelist, Y, n, Correlation = False, Laplacian = args.laplacian)
 
     print("Saving Embedding to embeddings.csv")
     np.savetxt("embeddings.csv", Z, fmt="%f")
