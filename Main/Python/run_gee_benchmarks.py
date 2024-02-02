@@ -79,7 +79,7 @@ if __name__ == '__main__':
             # Time the run_gee function
             runtime = timeit.timeit(lambda: run_gee(labels_path, graph_name, G_edgelist, n, numba=args.numba),
                                     number=1)
-            result_string = f"Experiment {i + 1} for {graph_name}: {runtime} seconds"
+            result_string = f"Running time {runtime}"
 
             # Print and write the result to runtime_results.txt
             print(result_string)
