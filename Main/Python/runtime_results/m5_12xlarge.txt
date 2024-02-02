@@ -738,3 +738,134 @@ Numba Serial
 
 friendster.npy
 
+
+
+Numba Serial
+
+
+
+twitch.npy
+
+
+
+Numba Serial
+
+
+
+twitch.npy
+
+
+
+Numba Serial
+
+
+
+twitch.npy
+
+
+
+Numba Serial
+
+
+
+twitch.npy
+
+12.145804441999985
+12.147523976000002
+12.180592585999989
+12.146523110999965
+12.214216251000039
+12.188402492000023
+12.254682578000029
+
+
+Numba Serial
+
+
+
+friendster.npy
+
+
+
+Numba Serial
+
+
+
+orkut-groups.npy
+
+595.8063374349999
+594.7782645980001
+
+
+Numba Serial
+
+
+
+friendster.npy
+
+
+
+Numba Serial
+
+
+
+friendster.npy
+
+
+
+Numba Serial
+
+
+
+friendster.npy
+
+
+
+Numba Serial
+
+
+
+friendster.npy
+
+3374.6127199919997
+3374.8293234449998
+
+
+GEE Stock
+
+
+
+orkut-groups.npy
+
+15.338338486999419
+11.396539165001741
+11.380701014997612
+
+
+GEE Stock
+
+
+
+orkut-groups.npy
+
+14.595864628998243
+11.440998016001686
+11.44310378800219
+11.448118185002386
+11.443116010999802
+
+
+GEE Stock
+
+
+
+twitch.npy
+
+3.583568598001875
+0.1996491009995225
+0.2005241919978289
+0.1998685660000774
+0.2000623589992756
+0.19963602400093805
+0.19947480499831727
+0.19990067199978512
