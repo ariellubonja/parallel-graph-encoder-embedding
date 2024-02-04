@@ -5,7 +5,7 @@ from sklearn.metrics import adjusted_rand_score
 from tensorflow import keras
 from tensorflow.keras.utils import to_categorical
 
-from Main.Python.Hyperperameters import Hyperperameters
+from Hyperperameters import Hyperperameters
 
 
 class GNN:

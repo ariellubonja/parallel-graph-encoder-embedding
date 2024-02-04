@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import DataPreprocess
+from src import DataPreprocess
 import timeit
 import argparse
 

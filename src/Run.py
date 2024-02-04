@@ -3,11 +3,11 @@ import numpy as np
 
 # Supress/hide the warning
 # invalide devide resutls will be nan
-from Main.Python.DataPreprocess import DataPreprocess, numba_graph_encoder_embed
-from Main.Python.Clustering import Clustering
-from Main.Python.Evaluation import Evaluation
-from Main.Python.GNN import GNN
-from Main.Python.LDA import LDA
+from DataPreprocess import DataPreprocess, numba_graph_encoder_embed
+from Clustering import Clustering
+from Evaluation import Evaluation
+from GNN import GNN
+from LDA import LDA
 
 
 np.seterr(invalid='ignore')
