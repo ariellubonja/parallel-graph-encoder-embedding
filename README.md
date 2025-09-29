@@ -1,6 +1,6 @@
 # Graph Encoder Embedding
 
-Fast Python implementation of Graph Encoder Embedding from **"One-Hot Graph Encoder Embedding"** by C. Shen, Q. Wang, and C. E. Priebe (2022, arXiv:2109.13098).
+Fast Python implementation of **"One-Hot Graph Encoder Embedding"** by C. Shen, Q. Wang, and C. E. Priebe (2022, arXiv:2109.13098).
 
 For ultra-fast C++ implementation using Ligra, see [parallel-graph-encoder-embedding-ligra](https://github.com/ariellubonja/parallel-graph-encoder-embedding-ligra).
 
@@ -87,3 +87,19 @@ pip install numpy numba sklearn tensorflow
 ```
 
 For maximum performance, use the [Ligra implementation](https://github.com/ariellubonja/parallel-graph-encoder-embedding-ligra) for large graphs (>100k nodes).
+
+
+## Paper & Citation
+
+Paper published in [IPDPS 2024](https://ieeexplore.ieee.org/abstract/document/10596504) | [arxiv](https://arxiv.org/pdf/2402.04403).
+
+```
+@inproceedings{lubonja2024edge,
+  title={Edge-parallel graph encoder embedding},
+  author={Lubonja, Ariel and Shen, Cencheng and Priebe, Carey and Burns, Randal},
+  booktitle={2024 IEEE International Parallel and Distributed Processing Symposium Workshops (IPDPSW)},
+  pages={482--485},
+  year={2024},
+  organization={IEEE}
+}
+```
