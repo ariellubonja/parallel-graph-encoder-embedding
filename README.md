@@ -1,6 +1,6 @@
 # Graph Encoder Embedding
 
-Fast Python implementation of **"One-Hot Graph Encoder Embedding"** by C. Shen, Q. Wang, and C. E. Priebe (2022, arXiv:2109.13098).
+Fast Python implementation of [**"One-Hot Graph Encoder Embedding"**](https://arxiv.org/abs/2109.13098) by C. Shen, Q. Wang, and C. E. Priebe.
 
 For ultra-fast C++ implementation using Ligra, see [parallel-graph-encoder-embedding-ligra](https://github.com/ariellubonja/parallel-graph-encoder-embedding-ligra).
 
